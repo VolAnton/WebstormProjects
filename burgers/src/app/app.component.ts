@@ -7,6 +7,7 @@ import {FormBuilder, Validators} from "@angular/forms";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  currency = '$';
 
   form = this.fb.group({
     order: ["", Validators.required],
@@ -125,6 +126,31 @@ export class AppComponent {
       alert("Спасибо за заказ! Мы скоро свяжемся с вами!");
       this.form.reset();
     }
+  }
+
+  changeCurrency() {
+    let newCurrency = "$";
+    let coefficient = 1;
+
+    if (this.currency === "$") {
+      newCurrency = "₽";
+      coefficient = 80;
+    } else if (this.currency === "₽") {
+      newCurrency = "BYN";
+      coefficient = 3;
+    } else if (this.currency === 'BYN') {
+      newCurrency = '€';
+      coefficient = 0.9;
+    } else if (this.currency === '€') {
+      newCurrency = '¥';
+      coefficient = 6.9;
+    }
+
+    this.currency = newCurrency;
+
+    this.productsData.forEach((item: any) => {
+      item.price = (item.basePrice * coefficient).toFixed(1);
+    });
   }
 
 }
